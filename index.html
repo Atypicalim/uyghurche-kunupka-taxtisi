@@ -72,7 +72,7 @@
     }
 
     #leftBox {
-        width: 40%;
+        width: 50%;
         height: 100%;
         background: rgb(54, 54, 54);
     }
@@ -81,13 +81,85 @@
         width: 90%;
         height: 90%;
         background: rgb(32, 32, 32);
-        border-radius: 5px;
         border: 2px solid black;
         box-shadow: 5px 5px 5px #161616;
+        filter: drop-shadow(1px 1px 5px rgba(85, 84, 84, 0.4));
+    }
+
+    .triangle {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(-45deg, transparent 50%, rgb(19, 19, 19) 30%, rgb(112, 112, 112) 90%);
+        width: 50px;
+        height: 50px;
+        box-shadow: -3px -3px 5px #0c0c0c;
+    }
+
+    #centerBox {
+        width: 15%;
+        height: 100%;
+        background: rgb(54, 54, 54);
+    }
+
+    #computer {
+        width: 100%;
+        height: 88%;
+        background: rgb(10, 10, 10);
+        border-radius: 5px;
+        justify-content: flex-start;
+        padding-top: 5%;
+    }
+
+    #computer0 {
+        width: 90%;
+        height: 2%;
+        background: rgb(10, 10, 10);
+        /* border-radius: 0px 0px 5px 5px; */
+    }
+
+    #computer1 {
+        width: 80%;
+        height: 2%;
+        background: rgb(36, 35, 35);
+        border-radius: 5px;
+        margin-top: 5%;
+    }
+
+    #computer2 {
+        width: 80%;
+        height: 2%;
+        background: rgb(36, 35, 35);
+        border-radius: 5px;
+        margin-top: 5%;
+    }
+
+    #computer3 {
+        width: 80%;
+        height: 2%;
+        background: rgb(36, 35, 35);
+        border-radius: 5px;
+        margin-top: 5%;
+    }
+
+    #computer4 {
+        width: 80%;
+        height: 7%;
+        background: rgb(36, 35, 35);
+        border-radius: 5px;
+        margin-top: 5%;
+    }
+
+    #computer5 {
+        width: 20px;
+        height: 20px;
+        background: rgb(36, 35, 35);
+        border-radius: 50%;
+        margin-top: 5%;
     }
 
     #rightBox {
-        width: 60%;
+        width: 45%;
         height: 100%;
         background: rgb(54, 54, 54);
     }
@@ -95,20 +167,20 @@
     #screen1 {
         width: 90%;
         height: 75%;
-        background: black;
+        background: rgb(10, 10, 10);
         border-radius: 5px;
     }
 
     #screen2 {
         width: 10%;
         height: 10%;
-        background: black;
+        background: rgb(10, 10, 10);
     }
 
     #screen3 {
         width: 75%;
         height: 5%;
-        background: black;
+        background: rgb(10, 10, 10);
         border-radius: 5px;
     }
 
@@ -137,7 +209,7 @@
         width: 95%;
         height: 90%;
         border: 5px solid black;
-        background:rgb(83, 83, 83);
+        background: rgb(10, 10, 10);
         border-radius: 10px;
         box-shadow: 5px 5px 5px #070707;
         padding: 5px;
@@ -155,7 +227,7 @@
     }
 
     .keyitem {
-        background:rgb(22, 22, 22);
+        background: rgb(22, 22, 22);
         border-radius: 5px;
         border: 2px solid rgb(126, 125, 125);
         height: 85%;
@@ -167,7 +239,6 @@
         margin: 5px;
         box-shadow: 5px 5px 5px #181818bd;
     }
-
 </style>
 
 <body>
@@ -176,7 +247,19 @@
             <div id="topBox"></div>
             <div id="middleBox">
                 <div id="leftBox" class="flex-center">
-                    <div id="blackboard"></div>
+                    <div id="blackboard">
+                        <div class="triangle"></div>
+                    </div>
+                </div>
+                <div id="centerBox" class="flex-center">
+                    <div id="computer" class="flex-center">
+                        <div id="computer1"></div>
+                        <div id="computer2"></div>
+                        <div id="computer3"></div>
+                        <div id="computer4"></div>
+                        <div id="computer5"></div>
+                    </div>
+                    <div id="computer0"></div>
                 </div>
                 <div id="rightBox" class="flex-center">
                     <div id="screen1" class="flex-center">
@@ -213,292 +296,290 @@
 
 <script>
 
-var KEYS = {
-    SWUNG: {
-        en: "`",
-        size: 1,
-    },
-    ONE:  {
-        en: "1",
-        size: 1,
-    },
-    TWO: {
-        en: "2",
-        size: 1,
-    },
-    THREE: {
-        en: "3",
-        size: 1,
-    },
-    FOUR: {
-        en: "4",
-        size: 1,
-    },
-    FIVE: {
-        en: "5",
-        size: 1,
-    },
-    SIX: {
-        en: "6",
-        size: 1,
-    },
-    SEVEN: {
-        en: "7",
-        size: 1,
-    },
-    EIGHT: {
-        en: "8",
-        size: 1,
-    },
-    NINE: {
-        en: "9",
-        size: 1,
-    },
-    ZERO: {
-        en: "0",
-        size: 1,
-    },
-    MINUS: {
-        en: "-",
-        size: 1,
-    },
-    EQUAL: {
-        en: "=",
-        size: 1,
-    },
-    BACKSPACE: {
-        en: "Backspace",
-        size: 2,
-    },
-    TAB: {
-        en: "Tab",
-        size: 1.5,
-    },
-    Q: {
-        en: "Q",
-        size: 1,
-    },
-    W: {
-        en: "W",
-        size: 1,
-    },
-    E: {
-        en: "E",
-        size: 1,
-    },
-    R: {
-        en: "R",
-        size: 1,
-    },
-    T: {
-        en: "T",
-        size: 1,
-    },
-    Y: {
-        en: "Y",
-        size: 1,
-    },
-    U: {
-        en: "U",
-        size: 1,
-    },
-    I: {
-        en: "I",
-        size: 1,
-    },
-    O: {
-        en: "O",
-        size: 1,
-    },
-    P: {
-        en: "P",
-        size: 1,
-    },
-    OPEN: {
-        en: "[",
-        size: 1,
-    },
-    CLOSE: {
-        en: "]",
-        size: 1,
-    },
-    BACKSLASH: {
-        en: "\\",
-        size: 1.35,
-    },
-    CAPSLOCK: {
-        en: "CapsLock",
-        size: 2,
-    },
-    A: {
-        en: "A",
-        size: 1,
-    },
-    S: {
-        en: "S",
-        size: 1,
-    },
-    D: {
-        en: "D",
-        size: 1,
-    },
-    F: {
-        en: "F",
-        size: 1,
-    },
-    G: {
-        en: "G",
-        size: 1,
-    },
-    H: {
-        en: "H",
-        size: 1,
-    },
-    J: {
-        en: "J",
-        size: 1,
-    },
-    K: {
-        en: "K",
-        size: 1,
-    },
-    L: {
-        en: "L",
-        size: 1,
-    },
-    COLON: {
-        en: ";",
-        size: 1,
-    },
-    QUETATION: {
-        en: "'",
-        size: 1,
-    },
-    ENTER: {
-        en: "Enter",
-        size: 2.5,
-    },
-    SHIFT_LEFT: {
-        en: "Shift",
-        size: 2.5,
-    },
-    Z: {
-        en: "Z",
-        size: 1,
-    },
-    X: {
-        en: "X",
-        size: 1,
-    },
-    C: {
-        en: "C",
-        size: 1,
-    },
-    V: {
-        en: "V",
-        size: 1,
-    },
-    B: {
-        en: "B",
-        size: 1,
-    },
-    N: {
-        en: "N",
-        size: 1,
-    },
-    M: {
-        en: "M",
-        size: 1,
-    },
-    LESS: {
-        en: ",",
-        size: 1,
-    },
-    MORE: {
-        en: ".",
-        size: 1,
-    },
-    ASK: {
-        en: "/",
-        size: 1,
-    },
-    SHIFT_RIGHT: {
-        en: "Shift",
-        size: 2.75,
-    },
-    CTRL_LEFT: {
-        en: "Ctrl",
-        size: 1.25,
-    },
-    FN_LEFT: {
-        en: "Fn",
-        size: 1,
-    },
-    WIN: {
-        en: "Win",
-        size: 1,
-    },
-    ALT_LEFT: {
-        en: "Alt",
-        size: 1,
-    },
-    SPACE: {
-        en: "Space",
-        size: 8,
-    },
-    ALT_RIGHT: {
-        en: "Alt",
-        size: 1,
-    },
-    FN_RIGHT: {
-        en: "Fn",
-        size: 1,
-    },
-    DOC: {
-        en: "Doc",
-        size: 1,
-    },
-    CTRL_RIGHT: {
-        en: "Ctrl",
-        size: 2,
-    },
-}
+    var KEYS = {
+        SWUNG: {
+            en: "`",
+            size: 1,
+        },
+        ONE: {
+            en: "1",
+            size: 1,
+        },
+        TWO: {
+            en: "2",
+            size: 1,
+        },
+        THREE: {
+            en: "3",
+            size: 1,
+        },
+        FOUR: {
+            en: "4",
+            size: 1,
+        },
+        FIVE: {
+            en: "5",
+            size: 1,
+        },
+        SIX: {
+            en: "6",
+            size: 1,
+        },
+        SEVEN: {
+            en: "7",
+            size: 1,
+        },
+        EIGHT: {
+            en: "8",
+            size: 1,
+        },
+        NINE: {
+            en: "9",
+            size: 1,
+        },
+        ZERO: {
+            en: "0",
+            size: 1,
+        },
+        MINUS: {
+            en: "-",
+            size: 1,
+        },
+        EQUAL: {
+            en: "=",
+            size: 1,
+        },
+        BACKSPACE: {
+            en: "Backspace",
+            size: 2,
+        },
+        TAB: {
+            en: "Tab",
+            size: 1.5,
+        },
+        Q: {
+            en: "Q",
+            size: 1,
+        },
+        W: {
+            en: "W",
+            size: 1,
+        },
+        E: {
+            en: "E",
+            size: 1,
+        },
+        R: {
+            en: "R",
+            size: 1,
+        },
+        T: {
+            en: "T",
+            size: 1,
+        },
+        Y: {
+            en: "Y",
+            size: 1,
+        },
+        U: {
+            en: "U",
+            size: 1,
+        },
+        I: {
+            en: "I",
+            size: 1,
+        },
+        O: {
+            en: "O",
+            size: 1,
+        },
+        P: {
+            en: "P",
+            size: 1,
+        },
+        OPEN: {
+            en: "[",
+            size: 1,
+        },
+        CLOSE: {
+            en: "]",
+            size: 1,
+        },
+        BACKSLASH: {
+            en: "\\",
+            size: 1.35,
+        },
+        CAPSLOCK: {
+            en: "CapsLock",
+            size: 2,
+        },
+        A: {
+            en: "A",
+            size: 1,
+        },
+        S: {
+            en: "S",
+            size: 1,
+        },
+        D: {
+            en: "D",
+            size: 1,
+        },
+        F: {
+            en: "F",
+            size: 1,
+        },
+        G: {
+            en: "G",
+            size: 1,
+        },
+        H: {
+            en: "H",
+            size: 1,
+        },
+        J: {
+            en: "J",
+            size: 1,
+        },
+        K: {
+            en: "K",
+            size: 1,
+        },
+        L: {
+            en: "L",
+            size: 1,
+        },
+        COLON: {
+            en: ";",
+            size: 1,
+        },
+        QUETATION: {
+            en: "'",
+            size: 1,
+        },
+        ENTER: {
+            en: "Enter",
+            size: 2.5,
+        },
+        SHIFT_LEFT: {
+            en: "Shift",
+            size: 2.5,
+        },
+        Z: {
+            en: "Z",
+            size: 1,
+        },
+        X: {
+            en: "X",
+            size: 1,
+        },
+        C: {
+            en: "C",
+            size: 1,
+        },
+        V: {
+            en: "V",
+            size: 1,
+        },
+        B: {
+            en: "B",
+            size: 1,
+        },
+        N: {
+            en: "N",
+            size: 1,
+        },
+        M: {
+            en: "M",
+            size: 1,
+        },
+        LESS: {
+            en: ",",
+            size: 1,
+        },
+        MORE: {
+            en: ".",
+            size: 1,
+        },
+        ASK: {
+            en: "/",
+            size: 1,
+        },
+        SHIFT_RIGHT: {
+            en: "Shift",
+            size: 2.75,
+        },
+        CTRL_LEFT: {
+            en: "Ctrl",
+            size: 1.25,
+        },
+        FN_LEFT: {
+            en: "Fn",
+            size: 1,
+        },
+        WIN: {
+            en: "Win",
+            size: 1,
+        },
+        ALT_LEFT: {
+            en: "Alt",
+            size: 1,
+        },
+        SPACE: {
+            en: "Space",
+            size: 8,
+        },
+        ALT_RIGHT: {
+            en: "Alt",
+            size: 1,
+        },
+        FN_RIGHT: {
+            en: "Fn",
+            size: 1,
+        },
+        DOC: {
+            en: "Doc",
+            size: 1,
+        },
+        CTRL_RIGHT: {
+            en: "Ctrl",
+            size: 2,
+        },
+    }
 
-for (const key in KEYS) {
-    KEYS[key].name = key
-}
+    for (const key in KEYS) {
+        KEYS[key].name = key
+    }
 
-var keyConfigs = [
-    [KEYS.SWUNG, KEYS.ONE, KEYS.TWO, KEYS.THREE, KEYS.FOUR, KEYS.FIVE, KEYS.SIX, KEYS.SEVEN, KEYS.EIGHT, KEYS.NINE, KEYS.ZERO, KEYS.MINUS, KEYS.EQUAL, KEYS.BACKSPACE],
-    [KEYS.TAB, KEYS.Q, KEYS.W, KEYS.E, KEYS.R, KEYS.T, KEYS.Y, KEYS.U, KEYS.I, KEYS.O, KEYS.P, KEYS.OPEN, KEYS.CLOSE, KEYS.BACKSLASH],
-    [KEYS.CAPSLOCK, KEYS.A, KEYS.S, KEYS.D, KEYS.F, KEYS.G, KEYS.H, KEYS.J, KEYS.K, KEYS.L, KEYS.COLON, KEYS.QUETATION, KEYS.ENTER],
-    [KEYS.SHIFT_LEFT, KEYS.Z, KEYS.X, KEYS.C, KEYS.V, KEYS.B, KEYS.N, KEYS.M, KEYS.LESS, KEYS.MORE, KEYS.ASK, KEYS.SHIFT_RIGHT],
-    [KEYS.CTRL_LEFT, KEYS.FN_LEFT, KEYS.WIN, KEYS.ALT_LEFT, KEYS.SPACE, KEYS.ALT_RIGHT, KEYS.FN_RIGHT, KEYS.DOC, KEYS.CTRL_RIGHT],
-]
+    var keyConfigs = [
+        [KEYS.SWUNG, KEYS.ONE, KEYS.TWO, KEYS.THREE, KEYS.FOUR, KEYS.FIVE, KEYS.SIX, KEYS.SEVEN, KEYS.EIGHT, KEYS.NINE, KEYS.ZERO, KEYS.MINUS, KEYS.EQUAL, KEYS.BACKSPACE],
+        [KEYS.TAB, KEYS.Q, KEYS.W, KEYS.E, KEYS.R, KEYS.T, KEYS.Y, KEYS.U, KEYS.I, KEYS.O, KEYS.P, KEYS.OPEN, KEYS.CLOSE, KEYS.BACKSLASH],
+        [KEYS.CAPSLOCK, KEYS.A, KEYS.S, KEYS.D, KEYS.F, KEYS.G, KEYS.H, KEYS.J, KEYS.K, KEYS.L, KEYS.COLON, KEYS.QUETATION, KEYS.ENTER],
+        [KEYS.SHIFT_LEFT, KEYS.Z, KEYS.X, KEYS.C, KEYS.V, KEYS.B, KEYS.N, KEYS.M, KEYS.LESS, KEYS.MORE, KEYS.ASK, KEYS.SHIFT_RIGHT],
+        [KEYS.CTRL_LEFT, KEYS.FN_LEFT, KEYS.WIN, KEYS.ALT_LEFT, KEYS.SPACE, KEYS.ALT_RIGHT, KEYS.FN_RIGHT, KEYS.DOC, KEYS.CTRL_RIGHT],
+    ]
 
-var $ = query2selector();
-var template = document.querySelector("#myTemplate").innerHTML;
-var renderer = template2renderer(template);
-var keyboard = $("#keyboard");
+    var $ = query2selector();
+    var template = document.querySelector("#myTemplate").innerHTML;
+    var renderer = template2renderer(template);
+    var keyboard = $("#keyboard");
 
-function updateKeyboard(language) {
-    var configs = [];
-    for (var i = 0; i < keyConfigs.length; i++)
-    {
-        configs[i] = []
-        for(j = 0; j < keyConfigs[i].length; j++)
-        {
-            var item = keyConfigs[i][j]
-            configs[i][j] = {
-                name: item.name,
-                text: item.en,
-                size: item.size,
+    function updateKeyboard(language) {
+        var configs = [];
+        for (var i = 0; i < keyConfigs.length; i++) {
+            configs[i] = []
+            for (j = 0; j < keyConfigs[i].length; j++) {
+                var item = keyConfigs[i][j]
+                configs[i][j] = {
+                    name: item.name,
+                    text: item.en,
+                    size: item.size,
+                }
             }
         }
+        $("#keyboard").html(renderer(configs));
     }
-    $("#keyboard").html(renderer(configs));
-}
-updateKeyboard();
+    updateKeyboard();
 
 </script>
 
