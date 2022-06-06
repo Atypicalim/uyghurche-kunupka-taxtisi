@@ -1,0 +1,1 @@
+# uyghurche-kunupka-taxtisi
