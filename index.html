@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="KeyX-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script type="text/javascript" src="./uyghurche/uyghurche.js"></script>
@@ -27,6 +27,22 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+    }
+
+    .text-format {
+        overflow-wrap: break-word;
+        direction: rtl;
+        overflow: scroll;
+        white-space: pre-wrap;
+        /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;
+        /* Mozilla, since 1999 */
+        white-space: -pre-wrap;
+        /* Opera 4-6 */
+        white-space: -o-pre-wrap;
+        /* Opera 7 */
+        word-wrap: break-word;
+        /* Internet Explorer 5.5+ */
     }
 
     /*  */
@@ -62,6 +78,41 @@
         width: 100%;
         height: 10%;
         background: rgba(0, 0, 0, 0.562);
+        display: flex;
+        flex-direction: row;
+    }
+
+    #controll {
+        width: 30%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .button {
+        width: 40%;
+        height: 50%;
+        margin-left: 5%;
+        border: 2px solid rgb(126, 125, 125);
+        background: rgb(22, 22, 22);
+        color: white;
+        border-radius: 5px;
+    }
+
+    .selected_button {
+        background: rgb(50, 50, 50);
+    }
+
+    #title {
+        width: 70%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 20px;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 24px;
     }
 
     #middleBox {
@@ -93,6 +144,17 @@
         border: 2px solid black;
         box-shadow: 5px 5px 5px #161616;
         filter: drop-shadow(1px 1px 5px rgba(85, 84, 84, 0.4));
+    }
+
+    #paper {
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+    }
+
+    #paper::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
     }
 
     .triangle {
@@ -194,24 +256,19 @@
     }
 
     #textBox {
-        width: 95%;
-        height: 85%;
+        width: 335px;
+        height: 200px;
         background: rgb(32, 32, 32);
         color: rgb(201, 201, 201);
         font-size: 24px;
         border: 2px solid rgb(0, 0, 0);
         border-radius: 5px;
         padding: 10px;
-        resize: none;
     }
 
-    textarea::-webkit-scrollbar {
-        width: 0;
-    }
-
-    #textBox:focus {
-        border: 2px solid rgb(39, 39, 39);
-        outline: none;
+    #textBox::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
     }
 
     #keyboard {
@@ -248,21 +305,19 @@
         margin: 5px;
         box-shadow: 5px 5px 5px #181818bd;
     }
-
-    .key_item_top {}
-
-    .key_item_bottom {}
-
-    .key_item_body {}
 </style>
 
-<body>
+<body class="unselectable">
     <div id="rootNode" class="flex-center">
         <div id="rootBox">
-            <div id="topBox"></div>
+            <div id="topBox">
+                <div id="controll"></div>
+                <div id="title">قول كۆندۈرۈش مەشىقى</div>
+            </div>
             <div id="middleBox">
                 <div id="leftBox" class="flex-center">
                     <div id="blackboard">
+                        <div id="paper" class="text-format"></div>
                         <div class="triangle"></div>
                     </div>
                 </div>
@@ -278,23 +333,33 @@
                 </div>
                 <div id="rightBox" class="flex-center">
                     <div id="screen1" class="flex-center">
-                        <textarea id="textBox" class="ug" autofocus="true"></textarea>
+                        <pre id="textBox" class="text-format"></pre>
                     </div>
                     <div id="screen2"></div>
                     <div id="screen3"></div>
                 </div>
             </div>
-            <div id="bottomBox" class="flex-center unselectable">
+            <div id="bottomBox" class="flex-center">
                 <div id="keyboard" class="flex-center"></div>
             </div>
         </div>
     </div>
 </body>
 
+<script id="myControll" type="text/html">
+    <button class="button <% isUg ? '' : 'selected_button' %>" onclick="setEn()">En</button>
+    <button class="button <% isUg ? 'selected_button' : '' %>" onclick="setUg()">ئۇ</button>
+    <button class="button" onclick="saveContent()">💾</button>
+    <button class="button" onclick="copyContent()">📄</button>
+    <button class="button" onclick="clipContent()">✂️</button>
+    <button class="button" onclick="deleteContent()">🗑️</button>
+    <button class="button" onclick="openWeb()">🕸️</button>
+</script>
+
 <script id="myKey" type="text/html">
     <% if (this.more != undefined) { %>
-        <div class="key_item_top"><% this.more %></div>
-        <div class="key_item_bottom"><% this.text %></div>
+        <div><% this.more %></div>
+        <div><% this.text %></div>
     <% } else { %>
         <div class="key_item_body"><% this.text %></div>
     <% } %>
@@ -304,7 +369,11 @@
     <% for (i in this) { %>
     <div class="keyrow">
         <% for (j in this[i]) { %>
-        <div class="keyitem" style='flex-grow: <% this[i][j].size %>;'>
+        <div
+        class="keyitem"
+        style='flex-grow: <% this[i][j].size %>;'
+        id='<% this[i][j].name %>'
+        onclick="onKeyClick('<% this[i][j].name %>');" >
             <% rendererKey(this[i][j]) %>
         </div>
         <% } %>
@@ -315,307 +384,321 @@
 <script>
 
     var KEYS = {
-        SWUNG: {
+        Backquote: {
             en: "`",
             en_more: '~',
             size: 1,
         },
-        ONE: {
+        Digit1: {
             en: "1",
             en_more: '!',
             size: 1,
         },
-        TWO: {
+        Digit2: {
             en: "2",
             en_more: '@',
             size: 1,
         },
-        THREE: {
+        Digit3: {
             en: "3",
             en_more: '#',
             size: 1,
         },
-        FOUR: {
+        Digit4: {
             en: "4",
             en_more: '$',
             size: 1,
         },
-        FIVE: {
+        Digit5: {
             en: "5",
             en_more: '%',
             size: 1,
         },
-        SIX: {
+        Digit6: {
             en: "6",
             en_more: '^',
             size: 1,
         },
-        SEVEN: {
+        Digit7: {
             en: "7",
             en_more: '&',
             size: 1,
         },
-        EIGHT: {
+        Digit8: {
             en: "8",
             en_more: '*',
             size: 1,
         },
-        NINE: {
+        Digit9: {
             en: "9",
             en_more: '(',
             size: 1,
         },
-        ZERO: {
+        Digit0: {
             en: "0",
             en_more: ')',
             size: 1,
         },
-        MINUS: {
+        Minus: {
             en: "-",
             en_more: '_',
             size: 1,
         },
-        EQUAL: {
+        Equal: {
             en: "=",
             en_more: '+',
             size: 1,
         },
-        BACKSPACE: {
-            en: "Backspace",
+        Backspace: {
+            en: "",
             size: 2,
+            text: "Backspace",
         },
-        TAB: {
-            en: "Tab",
+        Tab: {
+            en: "    ",
             size: 1.5,
+            text: "Tab",
         },
-        Q: {
+        KeyQ: {
             en: "Q",
             ug: "چ",
             size: 1,
         },
-        W: {
+        KeyW: {
             en: "W",
             ug: "ۋ",
             size: 1,
         },
-        E: {
+        KeyE: {
             en: "E",
             ug: "ې",
             size: 1,
         },
-        R: {
+        KeyR: {
             en: "R",
             ug: "ر",
             size: 1,
         },
-        T: {
+        KeyT: {
             en: "T",
             ug: "ت",
             size: 1,
         },
-        Y: {
+        KeyY: {
             en: "Y",
             ug: "ي",
             size: 1,
         },
-        U: {
+        KeyU: {
             en: "U",
             ug: "ۇ",
             size: 1,
         },
-        I: {
+        KeyI: {
             en: "I",
             ug: "ڭ",
             size: 1,
         },
-        O: {
+        KeyO: {
             en: "O",
             ug: "و",
             size: 1,
         },
-        P: {
+        KeyP: {
             en: "P",
             ug: "پ",
             size: 1,
         },
-        OPEN: {
+        BracketLeft: {
             en: "[",
             en_more: '{',
             size: 1,
         },
-        CLOSE: {
+        BracketRight: {
             en: "]",
             en_more: '}',
             size: 1,
         },
-        BACKSLASH: {
+        Backslash: {
             en: "\\",
             en_more: '|',
             size: 1.35,
         },
-        CAPSLOCK: {
-            en: "CapsLock",
+        CapsLock: {
+            en: "",
             size: 2,
+            text: "CapsLock",
         },
-        A: {
+        KeyA: {
             en: "A",
             ug: "ھ",
             size: 1,
         },
-        S: {
+        KeyS: {
             en: "S",
             ug: "س",
             size: 1,
         },
-        D: {
+        KeyD: {
             en: "D",
             ug: "د",
             ug_more: "ژ",
             size: 1,
         },
-        F: {
+        KeyF: {
             en: "F",
             ug: "ا",
             ug_more: "ف",
             size: 1,
         },
-        G: {
+        KeyG: {
             en: "G",
             ug: "ە",
             ug_more: "گ",
             size: 1,
         },
-        H: {
+        KeyH: {
             en: "H",
             ug: "ى",
             ug_more: "خ",
             size: 1,
         },
-        J: {
+        KeyJ: {
             en: "J",
             ug: "ق",
             ug_more: "ج",
             size: 1,
         },
-        K: {
+        KeyK: {
             en: "K",
             ug: "ك",
             ug_more: "ۆ",
             size: 1,
         },
-        L: {
+        KeyL: {
             en: "L",
             ug: "ل",
             size: 1,
         },
-        COLON: {
+        Semicolon: {
             en: ";",
             en_more: ':',
             size: 1,
         },
-        QUETATION: {
+        Quote: {
             en: "'",
             en_more: '"',
             size: 1,
         },
-        ENTER: {
-            en: "Enter",
+        Enter: {
+            en: "\n",
             size: 2.5,
+            text: "Enter",
         },
-        SHIFT_LEFT: {
-            en: "Shift",
+        ShiftLeft: {
+            en: "",
             size: 2.5,
+            text: "Shift",
         },
-        Z: {
+        KeyZ: {
             en: "Z",
             ug: "ز",
             size: 1,
         },
-        X: {
+        KeyX: {
             en: "X",
             ug: "ش",
             size: 1,
         },
-        C: {
+        KeyC: {
             en: "C",
             ug: "غ",
             size: 1,
         },
-        V: {
+        KeyV: {
             en: "V",
             ug: "ۈ",
             size: 1,
         },
-        B: {
+        KeyB: {
             en: "B",
             ug: "ب",
             size: 1,
         },
-        N: {
+        KeyN: {
             en: "N",
             ug: "ن",
             size: 1,
         },
-        M: {
+        KeyM: {
             en: "M",
             ug: "م",
             size: 1,
         },
-        LESS: {
+        Comma: {
             en: ",",
             en_more: '<',
             size: 1,
         },
-        MORE: {
+        Period: {
             en: ".",
             en_more: '>',
             size: 1,
         },
-        ASK: {
+        Slash: {
             en: "/",
             en_more: '?',
             ug: "ئ",
             size: 1,
         },
-        SHIFT_RIGHT: {
-            en: "Shift",
+        ShiftRight: {
+            en: "",
             size: 2.75,
+            text: "Shift",
         },
-        CTRL_LEFT: {
-            en: "Ctrl",
+        ControlLeft: {
+            en: "",
             size: 1.25,
+            text: "Ctrl",
         },
         FN_LEFT: {
-            en: "Fn",
+            en: "",
             size: 1,
+            text: "Fn",
         },
         WIN: {
-            en: "Win",
+            en: "",
             size: 1,
+            text: "Win",
         },
-        ALT_LEFT: {
-            en: "Alt",
+        AltLeft: {
+            en: "",
             size: 1,
+            text: "Alt",
         },
-        SPACE: {
-            en: "Space",
+        Space: {
+            en: " ",
             size: 8,
         },
-        ALT_RIGHT: {
-            en: "Alt",
+        AltRight: {
+            en: "",
             size: 1,
+            text: "Alt",
         },
         FN_RIGHT: {
             en: "Fn",
             size: 1,
+            text: "Fn",
         },
-        DOC: {
-            en: "Doc",
+        ContextMenu: {
+            en: "",
             size: 1,
+            text: "Doc",
         },
-        CTRL_RIGHT: {
-            en: "Ctrl",
+        ControlRight: {
+            en: "",
             size: 2,
+            text: "Ctrl",
         },
     }
 
@@ -624,11 +707,15 @@
     }
 
     var keyConfigs = [
-        [KEYS.SWUNG, KEYS.ONE, KEYS.TWO, KEYS.THREE, KEYS.FOUR, KEYS.FIVE, KEYS.SIX, KEYS.SEVEN, KEYS.EIGHT, KEYS.NINE, KEYS.ZERO, KEYS.MINUS, KEYS.EQUAL, KEYS.BACKSPACE],
-        [KEYS.TAB, KEYS.Q, KEYS.W, KEYS.E, KEYS.R, KEYS.T, KEYS.Y, KEYS.U, KEYS.I, KEYS.O, KEYS.P, KEYS.OPEN, KEYS.CLOSE, KEYS.BACKSLASH],
-        [KEYS.CAPSLOCK, KEYS.A, KEYS.S, KEYS.D, KEYS.F, KEYS.G, KEYS.H, KEYS.J, KEYS.K, KEYS.L, KEYS.COLON, KEYS.QUETATION, KEYS.ENTER],
-        [KEYS.SHIFT_LEFT, KEYS.Z, KEYS.X, KEYS.C, KEYS.V, KEYS.B, KEYS.N, KEYS.M, KEYS.LESS, KEYS.MORE, KEYS.ASK, KEYS.SHIFT_RIGHT],
-        [KEYS.CTRL_LEFT, KEYS.FN_LEFT, KEYS.WIN, KEYS.ALT_LEFT, KEYS.SPACE, KEYS.ALT_RIGHT, KEYS.FN_RIGHT, KEYS.DOC, KEYS.CTRL_RIGHT],
+        [
+            KEYS.Backquote,
+            KEYS.Digit1, KEYS.Digit2, KEYS.Digit3, KEYS.Digit4, KEYS.Digit5, KEYS.Digit6, KEYS.Digit7, KEYS.Digit8, KEYS.Digit9, KEYS.Digit0,
+            KEYS.Minus, KEYS.Equal, KEYS.Backspace
+        ],
+        [KEYS.Tab, KEYS.KeyQ, KEYS.KeyW, KEYS.KeyE, KEYS.KeyR, KEYS.KeyT, KEYS.KeyY, KEYS.KeyU, KEYS.KeyI, KEYS.KeyO, KEYS.KeyP, KEYS.BracketLeft, KEYS.BracketRight, KEYS.Backslash],
+        [KEYS.CapsLock, KEYS.KeyA, KEYS.KeyS, KEYS.KeyD, KEYS.KeyF, KEYS.KeyG, KEYS.KeyH, KEYS.KeyJ, KEYS.KeyK, KEYS.KeyL, KEYS.Semicolon, KEYS.Quote, KEYS.Enter],
+        [KEYS.ShiftLeft, KEYS.KeyZ, KEYS.KeyX, KEYS.KeyC, KEYS.KeyV, KEYS.KeyB, KEYS.KeyN, KEYS.KeyM, KEYS.Comma, KEYS.Period, KEYS.Slash, KEYS.ShiftRight],
+        [KEYS.ControlLeft, KEYS.FN_LEFT, KEYS.WIN, KEYS.AltLeft, KEYS.Space, KEYS.AltRight, KEYS.FN_RIGHT, KEYS.ContextMenu, KEYS.ControlRight],
     ]
 
     var $ = query2selector();
@@ -636,8 +723,14 @@
     var rendererBoard = template2renderer(templateBoard);
     var templateKey = document.querySelector("#myKey").innerHTML;
     var rendererKey = template2renderer(templateKey);
+    var templateControll = document.querySelector("#myControll").innerHTML;
+    var rendererControll = template2renderer(templateControll);
+    var isUg = undefined;
+    var isPressed = {}
+    var textContent = ""
+    var MAX_CONTENT = 1000
 
-    function updateKeyboard(isUg) {
+    function updateKeyboard() {
         var configs = [];
         for (var i = 0; i < keyConfigs.length; i++) {
             configs[i] = []
@@ -647,15 +740,139 @@
                 var more = isUg && item.ug_more != undefined ? item.ug_more : item.en_more
                 configs[i][j] = {
                     name: item.name,
-                    text: text,
+                    text: item.text != undefined ? item.text : text,
                     more: more,
                     size: item.size,
                 }
             }
         }
         $("#keyboard").html(rendererBoard(configs));
+        $("#controll").html(rendererControll(isUg));
     }
-    updateKeyboard(false);
+
+    function changeKeyColor(keyCode, isLight) {
+        $('#' + keyCode).style('background-color', isLight ? 'rgb(50, 50, 50)' : 'rgb(22, 22, 22)')
+    }
+
+    function doUpdateContent(tipText) {
+        textContent = textContent.substring(0, MAX_CONTENT);
+        $("#textBox").text(textContent);
+        var txt = "خەت سانى : " + textContent.length + '/' + MAX_CONTENT
+        if (tipText != undefined) {
+            txt = txt + "\n" + tipText
+        }
+        $("#paper").text(txt);
+    }
+
+    function onEnterCode(code) {
+        var config = KEYS[code]
+        if (config == undefined) {
+            return;
+        }
+        $("#textBox").nodes()[0].scrollTop = $("#textBox").nodes()[0].scrollHeight;
+        $("#paper").text('');
+        if (code == 'Backspace') {
+            textContent = textContent.substring(0, textContent.length - 1);
+            doUpdateContent();
+            return
+        }
+        var isShift = isPressed['ShiftLeft'] == true || isPressed['ShiftRight'] == true
+        if (isShift && config.ug_more != undefined) {
+            textContent = textContent + config.ug_more;
+        } else if (isShift && config.en_more != undefined) {
+            textContent = textContent + config.en_more;
+        } else if (config.ug != undefined) {
+            textContent = textContent + config.ug;
+        } else {
+            textContent = textContent + config.en;
+        }
+        doUpdateContent();
+    }
+
+    function onKeyClick(keyCode) {
+        onEnterCode(keyCode);
+        changeKeyColor(keyCode, true)
+        setTimeout(() => { changeKeyColor(keyCode, false) }, 100);
+    }
+    function onKeyDown(e) {
+        isPressed[e.code] = true;
+        changeKeyColor(e.code, true);
+        onEnterCode(e.code);
+    }
+    function onKeyUp(e) {
+        isPressed[e.code] = false;
+        changeKeyColor(e.code, false);
+    }
+    window.addEventListener("load", function () {
+        document.addEventListener(KEY_DOWN, onKeyDown, true);
+        document.addEventListener(KEY_UP, onKeyUp, true);
+    }, false);
+
+    function setClipboardText(value) {
+        const text = document.createElement('textarea');
+        text.value = value;
+        document.body.appendChild(text);
+        text.select();
+        document.execCommand('Copy');
+        text.remove();
+    }
+
+    function saveAndDownload(data, filename, type) {
+        var file = new Blob([data], { type: type });
+        var a = document.createElement("a");
+        var url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+
+    function saveContent() {
+        saveAndDownload(textContent, 'uyghurche', 'txt')
+        doUpdateContent('ساقلاندى ...');
+    }
+
+    function copyContent() {
+        setClipboardText(textContent);
+        doUpdateContent('كۆچۈرۈلدى ...');
+    }
+
+    function clipContent() {
+        setClipboardText(textContent);
+        textContent = "";
+        doUpdateContent('كىسىپ ئېلىندى ...');
+    }
+
+    function deleteContent() {
+        textContent = "";
+        doUpdateContent("ئۆچۈرۈلدى ...");
+    }
+
+    function openWeb() {
+        window.open("https://github.com/kompasim/uyghurche-kunupka-taxtisi", '_system');
+    }
+
+    function setUg() {
+        if (isUg) return;
+        isUg = true;
+        updateKeyboard();
+        doUpdateContent("تاختىدا ئۇيغۇرچە ھەرىپلەر كۆرسىتىلدى ...");
+    }
+
+    function setEn() {
+        if (!isUg) return;
+        isUg = false;
+        updateKeyboard();
+        doUpdateContent("تاختىدىن ئۇيغۇرچە ھەرىپلەر يۇشۇرۇلدى ...");
+    }
+
+    //
+    updateKeyboard();
+    doUpdateContent("مەرھابا خۇش كەپسىز ...");
 
 </script>
 
