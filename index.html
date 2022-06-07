@@ -20,6 +20,15 @@
         align-items: center;
     }
 
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
     /*  */
     * {
         padding: 0px;
@@ -240,15 +249,11 @@
         box-shadow: 5px 5px 5px #181818bd;
     }
 
-    .key_item_top {
-    }
+    .key_item_top {}
 
-    .key_item_bottom {
-    }
+    .key_item_bottom {}
 
-    .key_item_body {
-    }
-
+    .key_item_body {}
 </style>
 
 <body>
@@ -279,7 +284,7 @@
                     <div id="screen3"></div>
                 </div>
             </div>
-            <div id="bottomBox" class="flex-center">
+            <div id="bottomBox" class="flex-center unselectable">
                 <div id="keyboard" class="flex-center"></div>
             </div>
         </div>
