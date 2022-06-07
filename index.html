@@ -232,13 +232,23 @@
         border: 2px solid rgb(126, 125, 125);
         height: 85%;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         width: 10px;
         margin: 5px;
         box-shadow: 5px 5px 5px #181818bd;
     }
+
+    .key_item_top {
+    }
+
+    .key_item_bottom {
+    }
+
+    .key_item_body {
+    }
+
 </style>
 
 <body>
@@ -276,18 +286,21 @@
     </div>
 </body>
 
-<!-- <script id="myTemplate" type="text/html">
-    <% for (i in this) { %>
-    <li> <% this[i] %> </li>
+<script id="myKey" type="text/html">
+    <% if (this.more != undefined) { %>
+        <div class="key_item_top"><% this.more %></div>
+        <div class="key_item_bottom"><% this.text %></div>
+    <% } else { %>
+        <div class="key_item_body"><% this.text %></div>
     <% } %>
-</script> -->
+</script>
 
-<script id="myTemplate" type="text/html">
+<script id="myBoard" type="text/html">
     <% for (i in this) { %>
     <div class="keyrow">
         <% for (j in this[i]) { %>
         <div class="keyitem" style='flex-grow: <% this[i][j].size %>;'>
-            <div><% "" + this[i][j].text %></div>
+            <% rendererKey(this[i][j]) %>
         </div>
         <% } %>
     </div>
@@ -299,54 +312,67 @@
     var KEYS = {
         SWUNG: {
             en: "`",
+            en_more: '~',
             size: 1,
         },
         ONE: {
             en: "1",
+            en_more: '!',
             size: 1,
         },
         TWO: {
             en: "2",
+            en_more: '@',
             size: 1,
         },
         THREE: {
             en: "3",
+            en_more: '#',
             size: 1,
         },
         FOUR: {
             en: "4",
+            en_more: '$',
             size: 1,
         },
         FIVE: {
             en: "5",
+            en_more: '%',
             size: 1,
         },
         SIX: {
             en: "6",
+            en_more: '^',
             size: 1,
         },
         SEVEN: {
             en: "7",
+            en_more: '&',
             size: 1,
         },
         EIGHT: {
             en: "8",
+            en_more: '*',
             size: 1,
         },
         NINE: {
             en: "9",
+            en_more: '(',
             size: 1,
         },
         ZERO: {
             en: "0",
+            en_more: ')',
             size: 1,
         },
         MINUS: {
             en: "-",
+            en_more: '_',
             size: 1,
         },
         EQUAL: {
             en: "=",
+            en_more: '+',
             size: 1,
         },
         BACKSPACE: {
@@ -359,54 +385,67 @@
         },
         Q: {
             en: "Q",
+            ug: "چ",
             size: 1,
         },
         W: {
             en: "W",
+            ug: "ۋ",
             size: 1,
         },
         E: {
             en: "E",
+            ug: "ې",
             size: 1,
         },
         R: {
             en: "R",
+            ug: "ر",
             size: 1,
         },
         T: {
             en: "T",
+            ug: "ت",
             size: 1,
         },
         Y: {
             en: "Y",
+            ug: "ي",
             size: 1,
         },
         U: {
             en: "U",
+            ug: "ۇ",
             size: 1,
         },
         I: {
             en: "I",
+            ug: "ڭ",
             size: 1,
         },
         O: {
             en: "O",
+            ug: "و",
             size: 1,
         },
         P: {
             en: "P",
+            ug: "پ",
             size: 1,
         },
         OPEN: {
             en: "[",
+            en_more: '{',
             size: 1,
         },
         CLOSE: {
             en: "]",
+            en_more: '}',
             size: 1,
         },
         BACKSLASH: {
             en: "\\",
+            en_more: '|',
             size: 1.35,
         },
         CAPSLOCK: {
@@ -415,46 +454,63 @@
         },
         A: {
             en: "A",
+            ug: "ھ",
             size: 1,
         },
         S: {
             en: "S",
+            ug: "س",
             size: 1,
         },
         D: {
             en: "D",
+            ug: "د",
+            ug_more: "ژ",
             size: 1,
         },
         F: {
             en: "F",
+            ug: "ا",
+            ug_more: "ف",
             size: 1,
         },
         G: {
             en: "G",
+            ug: "ە",
+            ug_more: "گ",
             size: 1,
         },
         H: {
             en: "H",
+            ug: "ى",
+            ug_more: "خ",
             size: 1,
         },
         J: {
             en: "J",
+            ug: "ق",
+            ug_more: "ج",
             size: 1,
         },
         K: {
             en: "K",
+            ug: "ك",
+            ug_more: "ۆ",
             size: 1,
         },
         L: {
             en: "L",
+            ug: "ل",
             size: 1,
         },
         COLON: {
             en: ";",
+            en_more: ':',
             size: 1,
         },
         QUETATION: {
             en: "'",
+            en_more: '"',
             size: 1,
         },
         ENTER: {
@@ -467,42 +523,53 @@
         },
         Z: {
             en: "Z",
+            ug: "ز",
             size: 1,
         },
         X: {
             en: "X",
+            ug: "ش",
             size: 1,
         },
         C: {
             en: "C",
+            ug: "غ",
             size: 1,
         },
         V: {
             en: "V",
+            ug: "ۈ",
             size: 1,
         },
         B: {
             en: "B",
+            ug: "ب",
             size: 1,
         },
         N: {
             en: "N",
+            ug: "ن",
             size: 1,
         },
         M: {
             en: "M",
+            ug: "م",
             size: 1,
         },
         LESS: {
             en: ",",
+            en_more: '<',
             size: 1,
         },
         MORE: {
             en: ".",
+            en_more: '>',
             size: 1,
         },
         ASK: {
             en: "/",
+            en_more: '?',
+            ug: "ئ",
             size: 1,
         },
         SHIFT_RIGHT: {
@@ -560,26 +627,30 @@
     ]
 
     var $ = query2selector();
-    var template = document.querySelector("#myTemplate").innerHTML;
-    var renderer = template2renderer(template);
-    var keyboard = $("#keyboard");
+    var templateBoard = document.querySelector("#myBoard").innerHTML;
+    var rendererBoard = template2renderer(templateBoard);
+    var templateKey = document.querySelector("#myKey").innerHTML;
+    var rendererKey = template2renderer(templateKey);
 
-    function updateKeyboard(language) {
+    function updateKeyboard(isUg) {
         var configs = [];
         for (var i = 0; i < keyConfigs.length; i++) {
             configs[i] = []
             for (j = 0; j < keyConfigs[i].length; j++) {
                 var item = keyConfigs[i][j]
+                var text = isUg && item.ug != undefined ? item.en + " " + item.ug : item.en
+                var more = isUg && item.ug_more != undefined ? item.ug_more : item.en_more
                 configs[i][j] = {
                     name: item.name,
-                    text: item.en,
+                    text: text,
+                    more: more,
                     size: item.size,
                 }
             }
         }
-        $("#keyboard").html(renderer(configs));
+        $("#keyboard").html(rendererBoard(configs));
     }
-    updateKeyboard();
+    updateKeyboard(false);
 
 </script>
 
