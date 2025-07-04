@@ -6,7 +6,7 @@
 
 1. Ishlitish
 
-* [blog](https://kompasim.github.io/) bash betimge kirip [Uyghurche](https://kompasim.github.io/others/kirguzguch.html) torbetini ziyaret qiling
+* [blog](https://atypicalim.github.io/) bash betimge kirip [Uyghurche](https://atypicalim.github.io/others/kirguzguch.html) torbetini ziyaret qiling
 * bu ambarni chushurwelip yerlikte `uyghurche.html` hojjitini qosh chiking
 
 2. Misal
