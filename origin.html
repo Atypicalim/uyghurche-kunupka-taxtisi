@@ -6,8 +6,9 @@
     <meta http-equiv="KeyX-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script type="text/javascript" src="./pure-js-tools/src/template.js"></script>
-    <script type="text/javascript" src="./pure-js-tools/src/query.js"></script>
+    <script type="text/javascript" src="../pure-js-tools/src/template.js"></script>
+    <script type="text/javascript" src="../pure-js-tools/src/query.js"></script>
+    <script type="text/javascript" src="../uyghur-tili-quralliri/release/UyghurLanguageTools.js"></script>
 </head>
 
 <style>
@@ -344,6 +345,7 @@
     <button class="button <% isUg ? '' : 'selected_button' %>" onclick="setEn()">En</button>
     <button class="button <% isUg ? 'selected_button' : '' %>" onclick="setUg()">ئۇ</button>
     <button class="button" onclick="saveContent()">💾</button>
+    <button class="button" onclick="copyGraphic()">👁️</button>
     <button class="button" onclick="copyContent()">📄</button>
     <button class="button" onclick="clipContent()">✂️</button>
     <button class="button" onclick="deleteContent()">🗑️</button>
@@ -833,6 +835,13 @@
         doUpdateContent('ساقلاندى ...');
     }
 
+    function copyGraphic() {
+        // 
+        var extendedContent = UyghurLanguageTools.toExtended(textContent);
+        setClipboardText(extendedContent);
+        doUpdateContent('شەكىللەندى ...');
+    }
+
     function copyContent() {
         setClipboardText(textContent);
         doUpdateContent('كۆچۈرۈلدى ...');
@@ -841,7 +850,7 @@
     function clipContent() {
         setClipboardText(textContent);
         textContent = "";
-        doUpdateContent('كىسىپ ئېلىندى ...');
+        doUpdateContent('كېسىۋېلىندى ...');
     }
 
     function deleteContent() {
