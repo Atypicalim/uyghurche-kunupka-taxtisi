@@ -6,8 +6,10 @@
     <meta http-equiv="KeyX-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script type="text/javascript" src="../pure-js-tools/src/template.js"></script>
-    <script type="text/javascript" src="../pure-js-tools/src/query.js"></script>
+    <script type="text/javascript" src="../pure-js-tools/build/constants.js"></script>
+    <script type="text/javascript" src="../pure-js-tools/build/javascript.js"></script>
+    <script type="text/javascript" src="../pure-js-tools/build/tags.js"></script>
+    <script type="text/javascript" src="../pure-js-tools/build/query.js"></script>
     <script type="text/javascript" src="../uyghur-tili-quralliri/release/UyghurLanguageTools.js"></script>
 </head>
 
@@ -342,39 +344,14 @@
 </body>
 
 <script id="myControll" type="text/html">
-    <button class="button <% isUg ? '' : 'selected_button' %>" onclick="setEn()">En</button>
-    <button class="button <% isUg ? 'selected_button' : '' %>" onclick="setUg()">ئۇ</button>
+    <button class="button en_class_name" onclick="setEn()">En</button>
+    <button class="button ug_class_name" onclick="setUg()">ئۇ</button>
     <button class="button" onclick="saveContent()">💾</button>
     <button class="button" onclick="copyGraphic()">👁️</button>
     <button class="button" onclick="copyContent()">📄</button>
     <button class="button" onclick="clipContent()">✂️</button>
     <button class="button" onclick="deleteContent()">🗑️</button>
     <button class="button" onclick="openWeb()">🕸️</button>
-</script>
-
-<script id="myKey" type="text/html">
-    <% if (this.more != undefined) { %>
-        <div><% this.more %></div>
-        <div><% this.text %></div>
-    <% } else { %>
-        <div class="key_item_body"><% this.text %></div>
-    <% } %>
-</script>
-
-<script id="myBoard" type="text/html">
-    <% for (i in this) { %>
-    <div class="keyrow">
-        <% for (j in this[i]) { %>
-        <div
-        class="keyitem"
-        style='flex-grow: <% this[i][j].size %>;'
-        id='<% this[i][j].name %>'
-        onclick="onKeyClick('<% this[i][j].name %>');" >
-            <% rendererKey(this[i][j]) %>
-        </div>
-        <% } %>
-    </div>
-    <% } %>
 </script>
 
 <script>
@@ -700,7 +677,7 @@
         },
     }
 
-    for (const key in KEYS) {
+    for (var key in KEYS) {
         KEYS[key].name = key
     }
 
@@ -717,12 +694,44 @@
     ]
 
     var $ = query2selector();
-    var templateBoard = document.querySelector("#myBoard").innerHTML;
-    var rendererBoard = template2renderer(templateBoard);
-    var templateKey = document.querySelector("#myKey").innerHTML;
-    var rendererKey = template2renderer(templateKey);
-    var templateControll = document.querySelector("#myControll").innerHTML;
-    var rendererControll = template2renderer(templateControll);
+
+    var rendererBoard = function(configs) {
+        var rows = [];
+        for (i in configs) {
+            var _configs = configs[i];
+            var row = [];
+            for (j in _configs) {
+                var config = _configs[j];
+                var content = [];
+                if (config.more != undefined) {
+                    content.push(div({}, config.more));
+                    content.push(div({}, config.text));
+                } else {
+                    content.push(div({
+                        class: "key_item_body",
+                        text: config.text,
+                    }));
+                }
+                var button = div({
+                    class: "keyitem",
+                    style: 'flex-grow: ' + config.size + ';',
+                    id: config.name,
+                    onclick: "onKeyClick('" + config.name + "');",
+                }, content);
+                row.push(button);
+            }
+            rows.push(div({
+                class: "keyrow",
+            }, row));
+        }
+        return rows;
+    }
+    var rendererControll = function(isUg) {
+        var control = document.querySelector("#myControll").innerHTML;
+        control = control.replaceAll("en_class_name", isUg ? "" : "selected_button")
+        control = control.replaceAll("ug_class_name", isUg ? "selected_button" : "")
+        return control
+    }
     var isUg = undefined;
     var isPressed = {}
     var textContent = ""
@@ -744,7 +753,14 @@
                 }
             }
         }
-        $("#keyboard").html(rendererBoard(configs));
+        // 
+        var boardNode = document.getElementById("keyboard");
+        var nodeList = rendererBoard(configs);
+        boardNode.innerHTML = '';
+        for (let i = 0; i < nodeList.length; i++) {
+            const node = nodeList[i];
+            boardNode.appendChild(node);
+        }
         $("#controll").html(rendererControll(isUg));
     }
 
@@ -791,7 +807,7 @@
     function onKeyClick(keyCode) {
         onEnterCode(keyCode);
         changeKeyColor(keyCode, true)
-        setTimeout(() => { changeKeyColor(keyCode, false) }, 100);
+        setTimeout(function() { changeKeyColor(keyCode, false) }, 100);
     }
     function onKeyDown(e) {
         isPressed[e.code] = true;
@@ -808,7 +824,7 @@
     }, false);
 
     function setClipboardText(value) {
-        const text = document.createElement('textarea');
+        var text = document.createElement('textarea');
         text.value = value;
         document.body.appendChild(text);
         text.select();
